@@ -1,0 +1,131 @@
+// Zed settings
+//
+// For information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// To see all of Zed's default settings without changing your
+// custom settings, run the `open default settings` command
+// from the command palette or from `Zed` application menu.
+{
+    "agent_servers": {
+        "opencode": {
+            "type": "registry"
+        }
+    },
+    "cli_default_open_behavior": "existing_window",
+    "project_panel": {
+        "dock": "left"
+    },
+    "outline_panel": {
+        "dock": "left"
+    },
+    "collaboration_panel": {
+        "dock": "left"
+    },
+    "git_panel": {
+        "dock": "left"
+    },
+    "prettier": {
+        "allowed": false
+    },
+    "semantic_tokens": "full",
+    "text_rendering_mode": "platform_default",
+    "buffer_font_weight": 400.0,
+    "buffer_font_family": ".ZedMono",
+    "ui_font_family": ".ZedMono",
+    "agent_buffer_font_size": 14.0,
+    "agent_ui_font_size": 15.0,
+    "disable_ai": false,
+    "edit_predictions": {
+        "ollama": {
+            "model": "codegemma:latest"
+        },
+        "provider": "zed",
+        "mode": "subtle"
+    },
+    "tab_size": 4,
+    "buffer_font_size": null,
+    "ui_font_size": 14.0,
+    "terminal": {
+        "font_family": "JetBrainsMono Nerd Font",
+        "font_size": 13
+    },
+    "gutter": {
+        "line_numbers": true
+    },
+    "agent": {
+        "dock": "right",
+        "tool_permissions": {
+            "default": "allow"
+        },
+        "default_profile": "write",
+        "inline_assistant_model": {
+            "provider": "copilot_chat",
+            "model": "gpt-5.1-codex"
+        },
+        "default_model": {
+            "enable_thinking": true,
+            "provider": "ollama",
+            "model": "qwen3.5:9b"
+        }
+    },
+    "theme": "One Dark",
+    "telemetry": {
+        "diagnostics": false,
+        "metrics": false
+    },
+    "languages": {
+        "Python": {
+            "language_servers": [
+                "ruff",
+                "ty"
+            ],
+            "format_on_save": "on",
+            "formatter": [
+                {
+                    "code_action": "source.organizeImports.ruff"
+                },
+                {
+                    "code_action": "source.fixAll.ruff"
+                },
+                {
+                    "language_server": {
+                        "name": "ruff"
+                    }
+                }
+            ]
+        }
+    },
+    "lsp": {
+        "ruff": {
+            "initialization_options": {
+                "settings": {
+                    // Ruff server settings go here
+                    "lineLength": 80,
+                    "lint": {
+                        "extendSelect": [
+                            "I"
+                        ]
+                    }
+                }
+            }
+        }
+    },
+    "jupyter": {
+        "kernel_selections": {
+            "python": "python3"
+        }
+    },
+    "file_types": {
+        "Lisp": [
+            "lisp",
+            "cl"
+        ],
+        "Scheme": [
+            "scm",
+            "ss",
+            "sld",
+            "scheme"
+        ]
+    }
+}

@@ -1,0 +1,6 @@
+[user]
+    name = Alex Conconi
+    email = aconconi@users.noreply.github.com
+
+[core]
+    sshCommand = ssh -i ~/.ssh/id_rsa

@@ -1,0 +1,18 @@
+[includeIf "gitdir:~/Development/Alex/**"]
+    path = gitconfig-personal
+
+[includeIf "gitdir:~/Development/Work/**"]
+    path = gitconfig-emu
+
+[credential "https://github.com"]
+    helper =
+    helper = !gh auth git-credential
+[credential "https://gist.github.com"]
+    helper =
+    helper = !gh auth git-credential
+
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true

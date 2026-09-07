@@ -1,0 +1,109 @@
+# ----------------------------------------
+# Plugins
+# ----------------------------------------
+# uses plugin manager from https://satya164.page/posts/my-zsh-setup
+[[ -f "$ZDOTDIR/my_plugin_manager.zsh" ]] && source "$ZDOTDIR/my_plugin_manager.zsh"
+
+
+# ----------------------------------------
+# Powerlevel10k
+# ----------------------------------------
+
+# Powerlevel10k instant prompt - must be first
+#if [[ -r "${XDG_CACHE_HOME}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+#  source "${XDG_CACHE_HOME}/p10k-instant-prompt-${(%):-%n}.zsh"
+#fi
+
+# Powerlevel10k theme
+#THEME_PATH="$(brew --prefix)/share/powerlevel10k/powerlevel10k.zsh-theme"
+#[[ -f "$THEME_PATH" ]] && source "$THEME_PATH"
+
+# P10k personal config
+#[[ -f "$ZDOTDIR/.p10k.zsh" ]] && source "$ZDOTDIR/.p10k.zsh"
+
+# Starship
+eval "$(starship init zsh)"
+
+# ----------------------------------------
+# History (XDG compliant)
+# ----------------------------------------
+HISTFILE="$XDG_STATE_HOME/zsh/history"
+HISTSIZE=10000
+SAVEHIST=10000
+
+# Create history directory silently
+[[ -n "$HISTFILE" ]] && mkdir -p "$(dirname "$HISTFILE")" 2>/dev/null || true
+
+# append new history entries to the history file
+setopt APPEND_HISTORY
+
+# save each command to the history file as soon as it is executed
+setopt INC_APPEND_HISTORY
+
+# ignore recording duplicate consecutive commands in the history
+setopt HIST_IGNORE_DUPS
+
+# ignore commands that start with a space in the history
+setopt HIST_IGNORE_SPACE
+
+
+
+# ----------------------------------------
+# Completion cache (XDG compliant)
+# disable compinit if using zsh-autocomplete plugin
+# ----------------------------------------
+#autoload -Uz compinit
+#compinit -d "$XDG_CACHE_HOME/zsh/zcompdump"
+
+
+
+# ----------------------------------------
+# Eza
+# ----------------------------------------
+export EZA_CONFIG_DIR="$XDG_CONFIG_HOME/eza"
+
+
+# ----------------------------------------
+# Key Bindings
+# ----------------------------------------
+
+# jump to the start and end of the command line
+# >>> CTRL + A | CTRL + E
+bindkey "^A" beginning-of-line
+bindkey "^E" end-of-line
+# >>> Home | End
+bindkey "^[[H" beginning-of-line
+bindkey "^[[F" end-of-line
+
+# navigate words using Ctrl + arrow keys
+# >>> CRTL + right arrow | CRTL + left arrow
+bindkey "^[[1;5C" forward-word
+bindkey "^[[1;5D" backward-word
+
+# macosx override
+if [[ "$OSTYPE" == "darwin"* ]]; then 
+  # >>> OPT + right arrow | OPT + left arrow
+  bindkey "^[^[[C" forward-word
+  bindkey "^[^[[D" backward-word
+fi
+
+# delete characters using the "delete" key
+bindkey "^[[3~" delete-char
+
+
+
+# History Substring Search
+PLUGIN_PATH="/opt/homebrew/share/zsh-history-substring-search/zsh-history-substring-search.zsh"
+if [[ -f "$PLUGIN_PATH" ]]; then
+  source "$PLUGIN_PATH"
+
+  # Also bind for some terminals that use different codes
+  [[ -n "${terminfo[kcuu1]}" ]] && bindkey "${terminfo[kcuu1]}" history-substring-search-up
+  [[ -n "${terminfo[kcud1]}" ]] && bindkey "${terminfo[kcud1]}" history-substring-search-down
+fi
+
+# ----------------------------------------
+# Aliases
+# ----------------------------------------
+[[ -f "$ZDOTDIR/aliases.zsh" ]] && source "$ZDOTDIR/aliases.zsh"
+

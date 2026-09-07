@@ -1,0 +1,7 @@
+# Copy this file to ~/.config/git/gitconfig-emu (untracked) and replace
+# the placeholder with the real noreply email from GitHub.
+[user]
+    name = Alex Conconi
+    email = <INSERT_EMU_ID_HERE>
+[core]
+    sshCommand = ssh -i ~/.ssh/id_emu

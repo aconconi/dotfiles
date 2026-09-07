@@ -1,0 +1,23 @@
+# eza theme configuration
+# Using terminal ANSI colors, with specific overrides below:
+
+users:
+  user_you: { foreground: "#c0caf5" } # Tokyo Night Foreground (White)
+  group_yours: { foreground: "#c0caf5" } # Tokyo Night Foreground (White)
+  user_other: { foreground: "#c0caf5" } # Tokyo Night Blue
+  group_other: { foreground: "#c0caf5" } # Tokyo Night Blue
+  user_root: { foreground: "#f7768e" } # Tokyo Night Red
+  group_root: { foreground: "#f7768e" } # Tokyo Night Red
+
+file_type:
+  image: {foreground: "#fabd2f"}
+  video: {foreground: "#fb4934"}
+  music: {foreground: "#b8bb26"}
+  lossless: {foreground: "#8ec07c"}
+  crypto: {foreground: "#928374"}
+  document: {foreground: "#ebdbb2"}
+  compressed: {foreground: "#d3869b"}
+  temp: {foreground: "#cc241d"}
+  compiled: {foreground: "#83a598"}
+  build: {foreground: "#928374"}
+  source: {foreground: "#83a598"}

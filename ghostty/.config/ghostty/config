@@ -1,0 +1,89 @@
+# --------------------------------------------------
+# General
+# --------------------------------------------------
+
+# Hot reload: Ctrl+Shift+, (Linux) / Cmd+Shift+, (macOS)
+quit-after-last-window-closed = true
+
+auto-update = check
+auto-update-channel = tip
+
+
+# --------------------------------------------------
+# Keybindings
+# --------------------------------------------------
+
+# Toggle quick terminal
+keybind = global:cmd+escape=toggle_quick_terminal
+
+
+# --------------------------------------------------
+# Clipboard
+# --------------------------------------------------
+
+clipboard-read = allow
+clipboard-write = allow
+
+
+# --------------------------------------------------
+# Window
+# --------------------------------------------------
+
+window-width = 130
+window-height = 35
+
+# Padding (breathing room)
+window-padding-x = 10
+window-padding-y = 10
+window-padding-balance = true 
+
+
+# --------------------------------------------------
+# Appearance - Theme & Colors
+# --------------------------------------------------
+
+theme = TokyoNight
+palette = 4=#7aa2f7
+#theme = "One Dark"
+#theme = Horizon
+
+#background = #1c1e26
+#foreground = #d5d8da
+#selection-background = #6c6f93
+#selection-foreground = #1c1e26
+
+
+# --------------------------------------------------
+# Cursor
+# --------------------------------------------------
+
+cursor-style = block
+cursor-style-blink = false
+cursor-color = #29cd86
+cursor-text = #1a1b26
+
+# --------------------------------------------------
+# Typography
+# --------------------------------------------------
+
+font-family = "JetBrains Mono NF"
+#font-family = "Inconsolata"
+font-size = 16
+
+# Adjust line spacing
+adjust-cell-height = 15%
+
+
+# --------------------------------------------------
+# Shell Integration
+# --------------------------------------------------
+
+shell-integration-features = no-cursor
+
+
+# --------------------------------------------------
+# Transparency & Effects
+# --------------------------------------------------
+
+#background-opacity = 0.9
+#background-blur-radius = 20
