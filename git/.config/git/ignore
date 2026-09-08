@@ -4,6 +4,7 @@ Thumbs.db
 Desktop.ini
 $RECYCLE.BIN/
 .claude/
+.gemini/
 .aider*
 .cursor/
 .github/copilot/settings.local.json
