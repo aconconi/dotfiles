@@ -2,8 +2,14 @@
 
 # $all is shorthand for $username$hostname$localip$shlvl$singularity$kubernetes$nats$directory$vcsh$fossil_branch$fossil_metrics$git_branch$git_commit$git_state$git_metrics$git_status$hg_branch$hg_state$pijul_channel$docker_context$package$bun$c$cmake$cobol$cpp$daml$dart$deno$dotnet$elixir$elm$erlang$fennel$fortran$gleam$golang$gradle$haskell$haxe$helm$java$julia$kotlin$lua$mojo$nim$nodejs$ocaml$odin$opa$perl$php$pulumi$purescript$python$quarto$raku$rlang$red$ruby$rust$scala$solidity$swift$terraform$typst$vlang$vagrant$xmake$zig$buf$guix_shell$nix_shell$conda$pixi$meson$spack$memory_usage$aws$gcloud$openstack$azure$direnv$env_var$mise$crystal$custom$sudo$cmd_duration$line_break$jobs$battery$time$status$container$netns$os$shell$character
 "$schema" = "https://starship.rs/config-schema.json"
-format = "$all"
-right_format = ""
+#format = "$all"
+#right_format = ""
+format = """
+$username$hostname$directory$git_branch$git_status$git_metrics\
+$docker_context$python$nodejs$golang$rust$java$terraform\
+$cmd_duration$jobs$line_break$character\
+"""
+right_format = "$time$battery"
 continuation_prompt = "[∙](bright-black) "
 scan_timeout = 30
 command_timeout = 500
@@ -44,7 +50,7 @@ disabled = false
 format = "[$symbol$percentage]($style) "
 
 [[battery.display]]
-threshold = 10
+threshold = 20
 style = "red bold"
 
 [buf]
@@ -251,8 +257,10 @@ detect_files = [
 detect_folders = []
 
 [directory]
-truncation_length = 3
-truncate_to_repo = true
+#truncation_length = 3
+truncation_length = 100    # Prevents shortening deep paths (e.g. ~/Documents/Projects/App)
+# truncate_to_repo = true
+truncate_to_repo = false   # Prevents hiding parent paths when inside a Git repo
 fish_style_pwd_dir_length = 0
 use_logical_path = true
 format = "[$path]($style)[$read_only]($read_only_style) "
@@ -264,6 +272,9 @@ read_only_style = "red"
 truncation_symbol = ""
 home_symbol = "~"
 use_os_path_sep = true
+
+
+
 
 [directory.substitutions]
 
@@ -1276,10 +1287,10 @@ commands = [
 ]
 
 [time]
-format = "at [$time]($style) "
+format = "[⏱ $time]($style) "
 style = "bold yellow"
 use_12hr = false
-disabled = true
+disabled = false
 utc_time_offset = "local"
 time_range = "-"
 
