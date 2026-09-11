@@ -3,7 +3,3 @@
 --no-folding
 --verbose
 
-# Add the specific directories you want to skip here:
---ignore scripts
---ignore brewfiles
-
