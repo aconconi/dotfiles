@@ -5,15 +5,8 @@
 
 tap "agent-ecosystem/tap", trusted: true
 
-# Interact with Google Gemini AI models from the command-line
-brew "gemini-cli"
+brew "gemini-cli"                       # Interact with Google Gemini AI models from the command line
+brew "claude-code"                      # Claude Code, Anthropic's terminal-based coding agent
+brew "agent-ecosystem/tap/skill-validator" # Validate and score Agent Skill packages
 
-# Claude Code, Anthropic's terminal-based coding agent
-brew "claude-code"
-
-# CLI tool that validates and scores Agent Skill packages
-brew "agent-ecosystem/tap/skill-validator"
-
-# GitHub Copilot coding agent for the terminal, official npm package
-# (a macOS cask also exists, but the npm version is cross-platform)
-npm "@github/copilot"
+npm "@github/copilot" # GitHub Copilot coding agent; npm keeps the installation cross-platform

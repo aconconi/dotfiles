@@ -5,107 +5,60 @@
 
 # --- Python ---
 
-# Python interpreter, always the latest stable version published by Homebrew
-# (not pinned to a minor version, unlike python@3.13)
-brew "python"
-
-# Extremely fast Python package installer and resolver, also manages venvs (Rust)
-brew "uv"
-
-# Python dependency and virtualenv management (slower alternative to uv)
-brew "pipenv"
-
-# Simple, powerful testing framework for Python
-brew "pytest"
-
-# Long-standing static type checker for Python, written in Python itself
-brew "mypy"
-
-# Mature Python linter, deeper semantic analysis than ruff
-brew "pylint"
-
-# Fast static type checker for Python, by Microsoft (also powers Pylance)
-brew "pyright"
-
-# Extremely fast Python linter, covers most of pylint/flake8's rules (Rust)
-brew "ruff"
-
-# Next-generation Python type checker, still under active development (Rust, Astral)
-brew "ty"
-
-# Opinionated Python code formatter
-brew "black"
-
-# Advanced interactive shell for Python
-brew "ipython"
-
-# Command-line toolbox for elegant colored/formatted output
-brew "rich-cli"
-
-# Framework for managing multi-language pre-commit hooks
-brew "pre-commit"
-
-# Command-line benchmarking tool, with statistical analysis (Rust)
-brew "hyperfine"
+brew "python"     # Latest stable Python interpreter published by Homebrew
+brew "uv"         # Fast Python package installer, resolver, and virtual environment manager (Rust)
+brew "pipenv"     # Python dependency and virtual environment manager; slower alternative to uv
+brew "pytest"     # Python testing framework
+brew "mypy"       # Long-standing static type checker for Python
+brew "pylint"     # Mature Python linter with deeper semantic analysis than ruff
+brew "pyright"    # Fast Python type checker from Microsoft; also powers Pylance
+brew "ruff"       # Fast Python linter covering most pylint and flake8 rules (Rust)
+brew "ty"         # Next-generation Python type checker from Astral (Rust)
+brew "black"      # Opinionated Python code formatter
+brew "ipython"    # Advanced interactive Python shell
+brew "rich-cli"   # Command-line toolbox for colored and formatted output
+brew "pre-commit" # Framework for managing multi-language pre-commit hooks
+brew "hyperfine"  # Command-line benchmarking with statistical analysis (Rust)
 
 # --- JavaScript ---
 
-# Cross-platform JavaScript runtime, includes npm
-brew "node"
-
-# JavaScript package manager, alternative to npm, faster on repeated installs
-brew "yarn"
-
-# Fast, disk-efficient package manager, increasingly the default for modern
-# JS/TS projects (e.g. many Astro setups favor it over npm/yarn)
-brew "pnpm"
-
-# TypeScript compiler and language support (tsc)
-brew "typescript"
+brew "node"       # Cross-platform JavaScript runtime; includes npm
+brew "yarn"       # JavaScript package manager; faster than npm on repeated installs
+brew "pnpm"       # Fast, disk-efficient JavaScript and TypeScript package manager
+brew "typescript" # TypeScript compiler and language support (tsc)
 
 npm "eslint" # JavaScript linter, installed as a global npm package
 npm "prettier" # Opinionated code formatter for JS/TS/CSS/Markdown/etc.
 
-# All-in-one fast JS/TS runtime, bundler, and package manager (commented out)
-# brew "bun"
+# brew "bun"  # All-in-one fast JS/TS runtime, bundler, and package manager
+# brew "deno" # Alternative JS/TS runtime with native TypeScript support
 
-# Alternative JS/TS runtime with native TypeScript support (commented out)
-# brew "deno"
+# --- Development utilities ---
+
+brew "awscli"    # Official Amazon AWS command-line interface
+brew "miniserve" # High-performance static file server for local testing (Rust)
+brew "oha"       # HTTP load generator with a TUI, inspired by rakyll/hey (Rust)
+brew "xh"        # Fast command-line HTTP client with httpie-inspired syntax (Rust)
+brew "tokei"     # Count lines of code by language (Rust)
 
 # --- Editors and git ---
 
-# Post-modern modal text editor, focused on extensibility (Rust)
-brew "helix"
-
-# Ambitious Vim fork, extensible via Lua
-brew "neovim"
-
-# Official GitHub CLI, for PRs/issues/workflows from the terminal
-brew "gh"
-
-# Simple, fast TUI for the most common git commands (Go)
-brew "lazygit"
+brew "helix"   # Post-modern extensible modal text editor (Rust)
+brew "neovim"  # Ambitious Vim fork extensible through Lua
+brew "gh"      # Official GitHub CLI for PRs, issues, and workflows
+brew "lazygit" # Fast TUI for common Git commands (Go)
 
 # --- Assembly / retro dev ---
 
-# Cross assembler for multiple environments (e.g. retro/embedded development)
-brew "acme"
+brew "acme" # Cross assembler for retro and embedded development
 
 # --- Go (commented out, uncomment when needed) ---
 
-# Go toolchain: compiler, go mod, go test, etc.
-# brew "go"
-
-# Go meta-linter, aggregates dozens of linters into one tool
-# brew "golangci-lint"
-
-# Debugger for Go
-# brew "delve"
+# brew "go"            # Go toolchain: compiler, modules, and tests
+# brew "golangci-lint" # Go meta-linter aggregating dozens of linters
+# brew "delve"         # Go debugger
 
 # --- Rust (commented out, uncomment when needed) ---
 
-# Official Rust toolchain installer (rustc, cargo), manages versions
-# brew "rustup-init"
-
-# Language server for Rust, for autocompletion and IDE support
-# brew "rust-analyzer"
+# brew "rustup-init"   # Official version-managing Rust toolchain installer
+# brew "rust-analyzer" # Rust language server for completion and IDE support
