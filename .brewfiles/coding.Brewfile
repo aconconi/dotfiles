@@ -27,8 +27,9 @@ brew "yarn"       # JavaScript package manager; faster than npm on repeated inst
 brew "pnpm"       # Fast, disk-efficient JavaScript and TypeScript package manager
 brew "typescript" # TypeScript compiler and language support (tsc)
 
-npm "eslint" # JavaScript linter, installed as a global npm package
+npm "eslint"   # JavaScript linter, installed as a global npm package
 npm "prettier" # Opinionated code formatter for JS/TS/CSS/Markdown/etc.
+npm "surge"    # Publish static websites from the command line
 
 # brew "bun"  # All-in-one fast JS/TS runtime, bundler, and package manager
 # brew "deno" # Alternative JS/TS runtime with native TypeScript support
@@ -45,8 +46,10 @@ brew "tokei"     # Count lines of code by language (Rust)
 
 brew "helix"   # Post-modern extensible modal text editor (Rust)
 brew "neovim"  # Ambitious Vim fork extensible through Lua
-brew "gh"      # Official GitHub CLI for PRs, issues, and workflows
-brew "lazygit" # Fast TUI for common Git commands (Go)
+brew "gh"              # Official GitHub CLI for PRs, issues, and workflows
+brew "git-delta"       # Syntax-highlighting pager for Git diffs and output
+brew "git-filter-repo" # Rewrite Git history safely and efficiently
+brew "lazygit"         # Fast TUI for common Git commands (Go)
 
 # --- Assembly / retro dev ---
 

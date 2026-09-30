@@ -12,4 +12,5 @@ brew "fzf"              # Fuzzy finder used by shell keybindings (Go)
 brew "ripgrep"          # Fast grep alternative (Rust)
 brew "starship"         # Fast, customizable cross-shell prompt (Rust)
 brew "stow"             # Manage dotfiles with symlinks; install before the other packages
+brew "vim"              # Classic Vi-compatible terminal text editor
 brew "zsh-autocomplete" # Real-time type-ahead completion for Zsh
