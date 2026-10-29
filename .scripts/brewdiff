@@ -1,0 +1,211 @@
+#!/usr/bin/env bash
+# brewdiff: compare the brew packages (formulae and casks) declared in your
+# Brewfiles with the ones currently installed, showing for each package whether
+# it is installed and whether it is tracked.
+#
+# Usage: brewdiff [--filter untracked|missing|ok] [--brewfiles DIR] [--refresh]
+# Help:  brewdiff --help
+#
+# Works with bash 3.2 (macOS) and Linux: no bash associative arrays, the
+# aggregation is done with awk/sort on temporary files.
+#
+# Speed: descriptions are cached (default ~/.cache/brewdiff, for 7 days), only
+# packages missing from the cache are looked up, and formulae and casks are
+# fetched in parallel.
+
+set -u
+
+DIR="${BREWDIFF_DIR:-$HOME/dotfiles/.brewfiles}"
+FILTER="all"
+REFRESH=0
+
+CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/brewdiff"
+CACHE="$CACHE_DIR/descs.tsv"
+STAMP="$CACHE_DIR/stamp"
+CACHE_TTL_DAYS=7
+
+usage() {
+  cat <<'EOF'
+Usage: brewdiff [options]
+
+Compare the brew packages (formulae and casks) in your Brewfiles with the
+installed ones.
+
+Output, alphabetical, one line per package:
+  name   ✔|✘   tracked: <brewfile>[,<brewfile>]|untracked   [(deprecated)] description [(cask)]
+
+  ✔ / ✘      installed / not installed (formulae: `brew leaves`; casks: `brew list --cask`)
+  tracked    declared in at least one Brewfile (the file names are shown)
+  untracked  installed but not declared in any Brewfile
+
+Options:
+  -f, --filter F       show only a subset:
+                         untracked  installed but not tracked
+                         missing    tracked but not installed
+                         ok         installed and tracked
+                         all        everything (default)
+  -b, --brewfiles DIR  Brewfile directory (default: ~/dotfiles/.brewfiles,
+                       or $BREWDIFF_DIR)
+  -r, --refresh        ignore and rebuild the description cache
+  -h, --help           this message
+
+The files DIR/*.Brewfile and DIR/Brewfile are read; only `brew "..."` and
+`cask "..."` lines count (tap, npm, mas, vscode and comments are ignored).
+Descriptions are cached in ${XDG_CACHE_HOME:-~/.cache}/brewdiff for 7 days.
+EOF
+}
+
+die() { echo "brewdiff: $*" >&2; exit 2; }
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -h|--help)      usage; exit 0 ;;
+    -f|--filter)    [ $# -ge 2 ] || die "missing value for $1"; FILTER=$2; shift 2 ;;
+    --filter=*)     FILTER=${1#*=}; shift ;;
+    -b|--brewfiles) [ $# -ge 2 ] || die "missing value for $1"; DIR=$2; shift 2 ;;
+    --brewfiles=*)  DIR=${1#*=}; shift ;;
+    -r|--refresh)   REFRESH=1; shift ;;
+    *)              die "unknown option: $1 (see --help)" ;;
+  esac
+done
+
+case "$FILTER" in
+  all|untracked|missing|ok) ;;
+  *) die "invalid filter: $FILTER (use untracked, missing, ok or all)" ;;
+esac
+
+command -v brew >/dev/null 2>&1 || die "brew not found in PATH"
+[ -d "$DIR" ] || die "Brewfile directory not found: $DIR"
+
+TMP=$(mktemp -d "${TMPDIR:-/tmp}/brewdiff.XXXXXX") || die "cannot create temporary directory"
+trap 'rm -rf "$TMP"' EXIT
+
+TRACKED="$TMP/tracked.tsv"     # kind  short  full  brewfile
+INSTALLED="$TMP/installed.tsv" # kind  short  full
+RECORDS="$TMP/records.tsv"     # kind  short  full  installed(0|1)  brewfiles
+DESCS="$TMP/descs.tsv"         # kind  short  flag  description
+MISSING="$TMP/missing.tsv"     # kind  short  full  (not in the cache yet)
+: > "$TRACKED"; : > "$INSTALLED"; : > "$DESCS"
+
+# 1. Tracked packages: brew "x" / cask "x" lines of every Brewfile
+found=0
+for f in "$DIR"/*.Brewfile "$DIR"/Brewfile; do
+  [ -f "$f" ] || continue
+  found=1
+  label=$(basename "$f"); label=${label%.Brewfile}; label=$(echo "$label" | tr 'A-Z' 'a-z')
+  sed -E -n 's/^[[:space:]]*(brew|cask)[[:space:]]+["'"'"']([^"'"'"']+)["'"'"'].*/\1 \2/p' "$f" |
+    awk -v label="$label" '{ n=$2; sub(/.*\//, "", n); print $1 "\t" n "\t" $2 "\t" label }' >> "$TRACKED"
+done
+[ "$found" -eq 1 ] || die "no Brewfile found in $DIR"
+
+# 2. Installed packages: explicitly installed formulae (leaves) and casks
+{
+  brew leaves 2>/dev/null | awk 'NF { n=$1; sub(/.*\//, "", n); print "brew\t" n "\t" $1 }'
+  brew list --cask -1 2>/dev/null | awk 'NF { n=$1; sub(/.*\//, "", n); print "cask\t" n "\t" $1 }'
+} > "$INSTALLED"
+
+# 3. Union: kind, short, full, installed, brewfiles
+awk -F'\t' -v OFS='\t' -v f1="$TRACKED" '
+  FILENAME == f1 {
+    k = $1 SUBSEP $2
+    if (!(k in seen)) { seen[k] = 1; order[++n] = k; kind[k] = $1; name[k] = $2; full[k] = $3 }
+    if (files[k] == "") files[k] = $4
+    else if (index("," files[k] ",", "," $4 ",") == 0) files[k] = files[k] "," $4
+    next
+  }
+  {
+    k = $1 SUBSEP $2
+    if (!(k in seen)) { seen[k] = 1; order[++n] = k; kind[k] = $1; name[k] = $2; full[k] = $3 }
+    inst[k] = 1
+  }
+  END { for (i = 1; i <= n; i++) { k = order[i]; print kind[k], name[k], full[k], ((k in inst) ? 1 : 0), files[k] } }
+' "$TRACKED" "$INSTALLED" > "$RECORDS"
+
+# 4. Descriptions: cache first, then only what is missing
+if [ "$REFRESH" -eq 1 ]; then
+  rm -f "$CACHE" "$STAMP"
+elif [ -f "$STAMP" ] && [ -n "$(find "$STAMP" -mtime +"$CACHE_TTL_DAYS" 2>/dev/null)" ]; then
+  rm -f "$CACHE" "$STAMP"
+fi
+[ -f "$CACHE" ] && cp "$CACHE" "$DESCS"
+
+awk -F'\t' -v OFS='\t' -v fd="$DESCS" '
+  FILENAME == fd { have[$1 SUBSEP $2] = 1; next }
+  !(($1 SUBSEP $2) in have) { print $1, $2, $3 }
+' "$DESCS" "$RECORDS" > "$MISSING"
+
+# One `brew desc` call per kind. If it fails as a whole (e.g. one package is
+# unknown on this platform), retry one package per call, 8 at a time.
+fetch_desc() { # $1 = brew|cask, $2 = brew desc flag  ->  $TMP/new.$1
+  local kind=$1 flag=$2 names out
+  : > "$TMP/new.$kind"
+  names=$(awk -F'\t' -v k="$kind" '$1 == k { print $3 }' "$MISSING")
+  [ -n "$names" ] || return 0
+  # shellcheck disable=SC2086
+  if ! out=$(brew desc "$flag" $names 2>/dev/null) || [ -z "$out" ]; then
+    # shellcheck disable=SC2086
+    out=$(printf '%s\n' $names | xargs -P 8 -I{} brew desc "$flag" {} 2>/dev/null)
+  fi
+  printf '%s\n' "$out" | awk -v kind="$kind" '
+    { i = index($0, ": "); if (!i) next
+      left = substr($0, 1, i - 1); d = substr($0, i + 2)
+      gsub(/\r/, "", d); gsub(/\t/, " ", d); gsub(/^ +| +$/, "", d)
+      split(left, a, " "); nm = a[1]; sub(/.*\//, "", nm)
+      fl = ""
+      if (left ~ /\(deprecated\)/) fl = "(deprecated)"
+      else if (left ~ /\(disabled\)/) fl = "(disabled)"
+      print kind "\t" nm "\t" fl "\t" d }' > "$TMP/new.$kind"
+}
+
+if [ -s "$MISSING" ]; then
+  fetch_desc brew --formula &
+  fetch_desc cask --cask &
+  wait
+  cat "$TMP/new.brew" "$TMP/new.cask" > "$TMP/new.all"
+  # packages brew could not describe get an empty cached entry, so they do not
+  # trigger the slow path again at every run (use --refresh to retry)
+  awk -F'\t' -v OFS='\t' -v fn="$TMP/new.all" '
+    FILENAME == fn { got[$1 SUBSEP $2] = 1; next }
+    !(($1 SUBSEP $2) in got) { print $1, $2, "", "" }
+  ' "$TMP/new.all" "$MISSING" > "$TMP/neg.tsv"
+  cat "$TMP/new.all" "$TMP/neg.tsv" >> "$DESCS"
+  if mkdir -p "$CACHE_DIR" 2>/dev/null; then
+    cat "$TMP/new.all" "$TMP/neg.tsv" >> "$CACHE" 2>/dev/null
+    [ -f "$STAMP" ] || : > "$STAMP"
+  fi
+fi
+
+# 5. Merge, filter, sort alphabetically and format as columns
+COLOR=0
+if [ -t 1 ] && [ -z "${NO_COLOR:-}" ]; then COLOR=1; fi
+
+awk -F'\t' -v OFS='\t' -v filter="$FILTER" -v fd="$DESCS" '
+  FILENAME == fd { d[$1 SUBSEP $2] = $4; fl[$1 SUBSEP $2] = $3; next }
+  {
+    k = $1 SUBSEP $2; inst = $4; files = $5
+    if (filter == "untracked" && !(inst == 1 && files == "")) next
+    if (filter == "missing"   && !(inst == 0 && files != "")) next
+    if (filter == "ok"        && !(inst == 1 && files != "")) next
+    desc = d[k]
+    if (fl[k] != "") desc = (desc == "" ? fl[k] : fl[k] " " desc)
+    if ($1 == "cask") desc = (desc == "" ? "(cask)" : desc " (cask)")
+    print $2, inst, files, desc
+  }
+' "$DESCS" "$RECORDS" |
+  LC_ALL=C sort -f -t "$(printf '\t')" -k1,1 |
+  awk -F'\t' -v color="$COLOR" '
+    { name[NR] = $1; inst[NR] = $2; trk[NR] = ($3 == "" ? "untracked" : "tracked: " $3); desc[NR] = $4
+      if (length($1) > w1) w1 = length($1)
+      if (length(trk[NR]) > w2) w2 = length(trk[NR]) }
+    END {
+      green = color ? "\033[32m" : ""; red = color ? "\033[31m" : ""
+      yellow = color ? "\033[33m" : ""; reset = color ? "\033[0m" : ""
+      for (i = 1; i <= NR; i++) {
+        mark = inst[i] == 1 ? green "✔" reset : red "✘" reset
+        t = sprintf("%-" w2 "s", trk[i])
+        n = sprintf("%-" w1 "s", name[i])
+        if (trk[i] == "untracked") { t = yellow t reset; n = yellow n reset }
+        else if (inst[i] != 1)     { t = red t reset; n = red n reset }
+        printf "%s  %s  %s  %s\n", n, mark, t, desc[i]
+      }
+    }'
