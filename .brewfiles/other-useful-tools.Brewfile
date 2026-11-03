@@ -29,3 +29,4 @@ brew "marp-cli"     # Convert Marp Markdown into HTML, PDF, PPT, or images
 brew "mermaid-cli"  # Generate diagrams from Mermaid text
 brew "wildmason/tap/prosaic" # Writer-focused terminal app for long-form Markdown
 brew "silicon"      # Create images of source code snippets (Rust)
+brew "usbtree"      # Live USB device tree in your terminal
