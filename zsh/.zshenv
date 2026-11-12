@@ -17,9 +17,11 @@ export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 # -----------------------------
 # Homebrew (macOS and Linuxbrew)
 # -----------------------------
-for brew_bin in /opt/homebrew/bin/brew /home/linuxbrew/.linuxbrew/bin/brew /usr/local/bin/brew; do
-    if [ -x "$brew_bin" ]; then
-        eval "$("$brew_bin" shellenv)"
-        break
-    fi
-done
+if [ -z "$HOMEBREW_PREFIX" ]; then
+    for brew_bin in /opt/homebrew/bin/brew /home/linuxbrew/.linuxbrew/bin/brew /usr/local/bin/brew; do
+        if [ -x "$brew_bin" ]; then
+            eval "$("$brew_bin" shellenv)"
+            break
+        fi
+    done
+fi

@@ -42,6 +42,11 @@ fi
 alias pullall="ls | xargs -I{} git -C {} pull"
 alias ghostty="/Applications/Ghostty.app/Contents/MacOS/ghostty"
 
+# Update all zsh plugins cloned in ~/.zsh_plugins
+plugins_update() {
+  for d in ~/.zsh_plugins/*(/); do git -C "$d" pull --ff-only; done
+}
+
 
 case $(uname) in
 Darwin)

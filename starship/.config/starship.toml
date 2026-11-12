@@ -9,7 +9,7 @@ $username$hostname$directory$git_branch$git_status$git_metrics\
 $docker_context$python$nodejs$golang$rust$java$terraform\
 $cmd_duration$jobs$line_break$character\
 """
-right_format = "$time$battery"
+right_format = "$battery"
 continuation_prompt = "[∙](bright-black) "
 scan_timeout = 30
 command_timeout = 500
