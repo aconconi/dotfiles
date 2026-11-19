@@ -28,10 +28,13 @@
     "prettier": {
         "allowed": false
     },
-    "semantic_tokens": "full",
+    "semantic_tokens": "combined",
     "text_rendering_mode": "platform_default",
     "buffer_font_weight": 400.0,
     "buffer_font_family": ".ZedMono",
+    "buffer_font_features": {
+        "calt": false
+    },
     "ui_font_family": ".ZedMono",
     "agent_buffer_font_size": 14.0,
     "agent_ui_font_size": 15.0,
@@ -44,10 +47,10 @@
         "mode": "subtle"
     },
     "tab_size": 4,
-    "buffer_font_size": null,
+    "buffer_font_size": 14.0,
     "ui_font_size": 14.0,
     "terminal": {
-        "font_family": "JetBrainsMono Nerd Font",
+        "font_family": "JetBrains Mono NL",
         "font_size": 13
     },
     "gutter": {

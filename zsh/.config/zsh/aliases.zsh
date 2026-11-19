@@ -28,7 +28,9 @@ fi
 
 # Setup bat if available
 if [[ -x $(command -v bat) ]]; then
-  alias cat="bat"
+  alias cat="bat --paging=never"
+  alias less="bat"
+  export MANPAGER="sh -c 'col -bx | bat -l man -p --paging=always'"
 fi
 
 
