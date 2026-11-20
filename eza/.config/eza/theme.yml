@@ -9,6 +9,15 @@ users:
   user_root: { foreground: "#f7768e" } # Tokyo Night Red
   group_root: { foreground: "#f7768e" } # Tokyo Night Red
 
+perms:
+  user_read: { foreground: "#c8b878" }
+  group_read: { foreground: "#c8b878" }
+  other_read: { foreground: "#c8b878" }
+  user_execute_file: { foreground: "#50c878" }
+  user_execute_other: { foreground: "#50c878" }
+  group_execute: { foreground: "#50c878" }
+  other_execute: { foreground: "#50c878" }
+
 file_type:
   image: {foreground: "#fabd2f"}
   video: {foreground: "#fb4934"}

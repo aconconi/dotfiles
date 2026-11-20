@@ -31,6 +31,7 @@ if [[ -x $(command -v bat) ]]; then
   alias cat="bat --paging=never"
   alias less="bat"
   export MANPAGER="sh -c 'col -bx | bat -l man -p --paging=always'"
+  alias -g -- --help='--help 2>&1 | bat --language=help --style=plain'
 fi
 
 

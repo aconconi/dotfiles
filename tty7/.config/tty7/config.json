@@ -16,10 +16,10 @@
   "ui_font_size": 16.0,
   "ui_font_family": null,
   "theme": "light",
-  "theme_preset": "tokyo_night",
+  "theme_preset": "one_dark_pro",
   "theme_follow_system": false,
   "theme_preset_light": "light",
-  "theme_preset_dark": "tokyo_night",
+  "theme_preset_dark": "one_dark_pro",
   "theme_legible_palette": true,
   "window_opacity": 1.0,
   "window_blur": null,
@@ -102,29 +102,29 @@
       "last_used": 1794496870
     },
     "zsh": {
-      "count": 7,
-      "last_used": 1794930073
+      "count": 8,
+      "last_used": 1795174291
     }
   },
   "command_frecency": {},
   "agent_commands": {},
   "agent_launch": {},
   "agent_frecency": {
-    "opencode": {
+    "codex": {
       "count": 1,
-      "last_used": 1793697158
+      "last_used": 1794496433
     },
     "claude": {
       "count": 8,
       "last_used": 1794500167
     },
     "copilot": {
-      "count": 8,
-      "last_used": 1795092278
+      "count": 12,
+      "last_used": 1795174258
     },
-    "codex": {
+    "opencode": {
       "count": 1,
-      "last_used": 1794496433
+      "last_used": 1793697158
     }
   },
   "worktree_setup_trust": {},
