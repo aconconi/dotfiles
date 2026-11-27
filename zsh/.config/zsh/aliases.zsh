@@ -60,3 +60,10 @@ Linux)
   # commands for Linux go here'
   ;;
 esac
+
+# Claude personal alias
+claude-personal() {
+  CLAUDE_CONFIG_DIR="$HOME/.claude-personal" command claude "$@"
+}
+# use with: claude-personal auth login --claudeai
+#           claude-personal auth status

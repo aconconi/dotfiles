@@ -3,6 +3,9 @@
 # git, retro assembly. Go and Rust are present but commented out: uncomment
 # when needed. Install with: brew bundle --file=coding.Brewfile
 
+# --- Git ---
+brew "git"        # Distributed revision control system
+
 # --- Python ---
 
 brew "python"     # Latest stable Python interpreter published by Homebrew

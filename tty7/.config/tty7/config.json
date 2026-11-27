@@ -1,5 +1,5 @@
 {
-  "font_family": "Lilex Nerd Font",
+  "font_family": "JetBrainsMonoNL Nerd Font Mono",
   "font_fallbacks": [
     "Menlo",
     "Hasklug Nerd Font Mono",
@@ -10,16 +10,16 @@
   "font_family_bold": null,
   "font_family_italic": null,
   "font_features": null,
-  "font_thicken": true,
-  "font_size": 15.0,
+  "font_thicken": false,
+  "font_size": 16.0,
   "line_height": 1.4999999,
   "ui_font_size": 16.0,
   "ui_font_family": null,
   "theme": "light",
-  "theme_preset": "one_dark_pro",
+  "theme_preset": "tokyo_night",
   "theme_follow_system": false,
-  "theme_preset_light": "light",
-  "theme_preset_dark": "one_dark_pro",
+  "theme_preset_light": "one_dark_pro-custom",
+  "theme_preset_dark": "tokyo_night",
   "theme_legible_palette": true,
   "window_opacity": 1.0,
   "window_blur": null,
@@ -97,30 +97,34 @@
   "verify_host_keys": true,
   "ssh_warn_on_close": false,
   "shell_frecency": {
+    "zsh": {
+      "count": 12,
+      "last_used": 1795533633
+    },
     "fish": {
       "count": 12,
       "last_used": 1794496870
-    },
-    "zsh": {
-      "count": 8,
-      "last_used": 1795174291
     }
   },
   "command_frecency": {},
   "agent_commands": {},
   "agent_launch": {},
   "agent_frecency": {
+    "gemini": {
+      "count": 4,
+      "last_used": 1795776745
+    },
     "codex": {
       "count": 1,
       "last_used": 1794496433
     },
     "claude": {
-      "count": 8,
-      "last_used": 1794500167
+      "count": 12,
+      "last_used": 1795702391
     },
     "copilot": {
-      "count": 12,
-      "last_used": 1795174258
+      "count": 13,
+      "last_used": 1795776406
     },
     "opencode": {
       "count": 1,

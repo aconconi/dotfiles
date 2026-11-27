@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # brewdiff: compare the brew packages (formulae and casks) declared in your
 # Brewfiles with the ones currently installed, showing for each package whether
-# it is installed and whether it is tracked.
+# it is installed and whether it is tracked (✅ ❌ 🆕).
 #
 # Usage: brewdiff [--filter untracked|missing|ok] [--brewfiles DIR] [--refresh]
 # Help:  brewdiff --help
@@ -32,11 +32,12 @@ Compare the brew packages (formulae and casks) in your Brewfiles with the
 installed ones.
 
 Output, alphabetical, one line per package:
-  name   ✔|✘   tracked: <brewfile>[,<brewfile>]|untracked   [(deprecated)] description [(cask)]
+  <emoji>  name  [<brewfile>[,<brewfile>]] [(deprecated)] description [(cask)]
 
-  ✔ / ✘      installed / not installed (formulae: `brew leaves`; casks: `brew list --cask`)
-  tracked    declared in at least one Brewfile (the file names are shown)
-  untracked  installed but not declared in any Brewfile
+  ✅  installed and tracked (formulae: `brew leaves`; casks: `brew list --cask`)
+  ❌  tracked but not installed
+  🆕  installed but not tracked (no Brewfile category shown)
+  [..] category: the Brewfile(s) declaring the package
 
 Options:
   -f, --filter F       show only a subset:
@@ -194,18 +195,19 @@ awk -F'\t' -v OFS='\t' -v filter="$FILTER" -v fd="$DESCS" '
 ' "$DESCS" "$RECORDS" |
   LC_ALL=C sort -f -t "$(printf '\t')" -k1,1 |
   awk -F'\t' -v color="$COLOR" '
-    { name[NR] = $1; inst[NR] = $2; trk[NR] = ($3 == "" ? "untracked" : "tracked: " $3); desc[NR] = $4
-      if (length($1) > w1) w1 = length($1)
-      if (length(trk[NR]) > w2) w2 = length(trk[NR]) }
+    { name[NR] = $1; inst[NR] = $2; files[NR] = $3; desc[NR] = $4
+      if (length($1) > w1) w1 = length($1) }
     END {
-      green = color ? "\033[32m" : ""; red = color ? "\033[31m" : ""
-      yellow = color ? "\033[33m" : ""; reset = color ? "\033[0m" : ""
+      red = color ? "\033[31m" : ""; cyan = color ? "\033[36m" : ""; reset = color ? "\033[0m" : ""
       for (i = 1; i <= NR; i++) {
-        mark = inst[i] == 1 ? green "✔" reset : red "✘" reset
-        t = sprintf("%-" w2 "s", trk[i])
+        if (inst[i] != 1)        mark = "❌"
+        else if (files[i] == "") mark = "🆕"
+        else                     mark = "✅"
         n = sprintf("%-" w1 "s", name[i])
-        if (trk[i] == "untracked") { t = yellow t reset; n = yellow n reset }
-        else if (inst[i] != 1)     { t = red t reset; n = red n reset }
-        printf "%s  %s  %s  %s\n", n, mark, t, desc[i]
+        if (files[i] == "")      n = cyan n reset
+        else if (inst[i] != 1)   n = red n reset
+        d = desc[i]
+        if (files[i] != "") d = "[" files[i] "] " d
+        printf "%s  %s  %s\n", mark, n, d
       }
     }'
